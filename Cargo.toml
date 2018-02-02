@@ -7,6 +7,10 @@ repository = "https://github.com/yobicash/libyobicash"
 description = "The Yobicash cryptographyc toolkit"
 categories = ["cryptography"]
 
+[lib]
+name = "yobicrypto"
+path = "src/lib.rs"
+
 [dependencies]
 failure = "^0.1"
 failure_derive = "^0.1"

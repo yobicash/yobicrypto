@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Christian Nyumbayire <christian@yobicash.org>"]
 links = "ctaes"
 build = "build.rs"
-repository = "https://github.com/yobicash/yobicash"
+repository = "https://github.com/yobicash/yobicrypto"
 description = "Native bindings to the ctaes library"
 categories = ["cryptography", "external-ffi-bindings"]
 

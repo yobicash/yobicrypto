@@ -18,7 +18,7 @@ use hex;
 use error::ErrorKind;
 use result::Result;
 use traits::Validate;
-use traits::{JsonSerialize, BinarySerialize, HexSerialize, Serialize};
+use traits::{BinarySerialize, HexSerialize};
 use scalar::Scalar;
 
 use std::ops::{Add, Sub, Mul};
@@ -130,18 +130,6 @@ impl HexSerialize for Point {
         Self::from_bytes(&hex::decode(s)?)
     }
 }
-
-impl JsonSerialize for Point {
-    fn to_json(&self) -> Result<String> {
-        self.to_hex()
-    }
-
-    fn from_json(s: &str) -> Result<Point> {
-        Self::from_hex(s)
-    }
-}
-
-impl Serialize for Point {}
 
 impl fmt::Display for Point {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

@@ -15,7 +15,7 @@ use hex;
 
 use error::ErrorKind;
 use result::Result;
-use traits::{JsonSerialize, BinarySerialize, HexSerialize, Serialize};
+use traits::{BinarySerialize, HexSerialize};
 
 use std::fmt;
 
@@ -58,18 +58,6 @@ impl HexSerialize for Digest {
         Self::from_bytes(&hex::decode(s)?)
     }
 }
-
-impl JsonSerialize for Digest {
-    fn to_json(&self) -> Result<String> {
-        self.to_hex()
-    }
-
-    fn from_json(s: &str) -> Result<Digest> {
-        Self::from_hex(s)
-    }
-}
-
-impl Serialize for Digest {}
 
 impl fmt::Display for Digest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

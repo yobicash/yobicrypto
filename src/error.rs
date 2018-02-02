@@ -11,10 +11,8 @@ use failure::{Fail, Context, Backtrace};
 use failure::Error as FailureError;
 
 use std::fmt::{self, Display};
-use std::option::NoneError;
 use std::io::Error as IOError;
 
-use serde_json::Error as JsonError;
 use hex::FromHexError;
 
 /// The error type used in `libyobicash`.
@@ -92,12 +90,6 @@ impl From<FailureError> for Error {
     }
 }
 
-impl From<NoneError> for Error {
-    fn from(_: NoneError) -> Error {
-        Error { inner: Context::new(ErrorKind::NotFound) }
-    }
-}
-
 impl From<IOError> for Error {
     fn from(_: IOError) -> Error {
         Error { inner: Context::new(ErrorKind::IOFailure) }
@@ -106,12 +98,6 @@ impl From<IOError> for Error {
 
 impl From<FromHexError> for Error {
     fn from(_: FromHexError) -> Error {
-        Error { inner: Context::new(ErrorKind::DeserializationFailure) }
-    }
-}
-
-impl From<JsonError> for Error {
-    fn from(_: JsonError) -> Error {
         Error { inner: Context::new(ErrorKind::DeserializationFailure) }
     }
 }

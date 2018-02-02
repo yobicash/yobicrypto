@@ -16,7 +16,7 @@ use hex;
 use error::ErrorKind;
 use result::Result;
 use traits::Validate;
-use traits::{JsonSerialize, BinarySerialize, HexSerialize, Serialize};
+use traits::{BinarySerialize, HexSerialize};
 
 use std::ops::{Add, Sub, Mul};
 use std::fmt;
@@ -126,18 +126,6 @@ impl HexSerialize for Scalar {
         Self::from_bytes(&hex::decode(s)?)
     }
 }
-
-impl JsonSerialize for Scalar {
-    fn to_json(&self) -> Result<String> {
-        self.to_hex()
-    }
-
-    fn from_json(s: &str) -> Result<Scalar> {
-        Self::from_hex(s)
-    }
-}
-
-impl Serialize for Scalar {}
 
 impl fmt::Display for Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

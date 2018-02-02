@@ -18,7 +18,7 @@ use hex;
 use error::ErrorKind;
 use result::Result;
 use traits::Validate;
-use traits::{JsonSerialize, BinarySerialize, HexSerialize, Serialize};
+use traits::{BinarySerialize, HexSerialize};
 use scalar::Scalar;
 use point::Point;
 
@@ -65,18 +65,6 @@ impl HexSerialize for SecretKey {
     }
 }
 
-impl JsonSerialize for SecretKey {
-    fn to_json(&self) -> Result<String> {
-        self.to_hex()
-    }
-
-    fn from_json(s: &str) -> Result<SecretKey> {
-        Self::from_hex(s)
-    }
-}
-
-impl Serialize for SecretKey {}
-
 impl fmt::Display for SecretKey {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{:?}", self.to_hex().unwrap())
@@ -121,18 +109,6 @@ impl HexSerialize for PublicKey {
         Self::from_bytes(&hex::decode(s)?)
     }
 }
-
-impl JsonSerialize for PublicKey {
-    fn to_json(&self) -> Result<String> {
-        self.to_hex()
-    }
-
-    fn from_json(s: &str) -> Result<PublicKey> {
-        Self::from_hex(s)
-    }
-}
-
-impl Serialize for PublicKey {}
 
 impl fmt::Display for PublicKey {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -197,18 +173,6 @@ impl HexSerialize for SharedKey {
         Self::from_bytes(&hex::decode(s)?)
     }
 }
-
-impl JsonSerialize for SharedKey {
-    fn to_json(&self) -> Result<String> {
-        self.to_hex()
-    }
-
-    fn from_json(s: &str) -> Result<SharedKey> {
-        Self::from_hex(s)
-    }
-}
-
-impl Serialize for SharedKey {}
 
 impl fmt::Display for SharedKey {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

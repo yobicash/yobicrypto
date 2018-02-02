@@ -7,14 +7,12 @@
 
 //! The `zkp` module provides Schnorr Algorithm types, traits, and methods.
 
-use serde_json;
-use serde_json::Value as JsonValue;
 use hex;
 
 use error::ErrorKind;
 use result::Result;
 use traits::Validate;
-use traits::{JsonSerialize, BinarySerialize, HexSerialize, Serialize};
+use traits::{BinarySerialize, HexSerialize};
 use scalar::Scalar;
 use point::Point;
 
@@ -75,18 +73,6 @@ impl HexSerialize for ZKPWitness {
         Ok(ZKPWitness(Point::from_hex(s)?))
     }
 }
-
-impl JsonSerialize for ZKPWitness {
-    fn to_json(&self) -> Result<String> {
-        self.0.to_json()
-    }
-
-    fn from_json(s: &str) -> Result<ZKPWitness> {
-        Ok(ZKPWitness(Point::from_json(s)?))
-    }
-}
-
-impl Serialize for ZKPWitness {}
 
 impl fmt::Display for ZKPWitness {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -196,37 +182,5 @@ impl HexSerialize for ZKPProof {
 
     fn from_hex(s: &str) -> Result<ZKPProof> {
         Self::from_bytes(&hex::decode(s)?)
-    }
-}
-
-impl JsonSerialize for ZKPProof {
-    fn to_json(&self) -> Result<String> {
-        let partial = json!({
-          "public_coin": self.challenge.to_json()?,
-          "challenge": self.challenge.to_json()?,
-          "response": self.response.to_json()?,
-        });
-
-        Ok(partial.to_string())
-    }
-
-    fn from_json(s: &str) -> Result<ZKPProof> {
-        let partial: JsonValue = serde_json::from_str(s)?;
-        let public_coin = Point::from_json(partial["public_coin"].as_str()?)?;
-        let challenge = Scalar::from_json(partial["challenge"].as_str()?)?;
-        let response = Scalar::from_json(partial["response"].as_str()?)?;
-        Ok(ZKPProof {
-            public_coin: public_coin,
-            challenge: challenge,
-            response: response,
-        })
-    }
-}
-
-impl Serialize for ZKPProof {}
-
-impl fmt::Display for ZKPProof {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{:?}", self.to_json().unwrap())
     }
 }

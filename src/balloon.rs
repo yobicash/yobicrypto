@@ -10,7 +10,6 @@
 use byteorder::{BigEndian, WriteBytesExt};
 use rmp_serde::encode as encode_msgpk;
 use rmp_serde::decode as decode_msgpk;
-use serde_json as json;
 use hex;
 use num::bigint::BigUint;
 use num::traits::One;
@@ -18,7 +17,7 @@ use num::traits::One;
 use error::ErrorKind;
 use result::Result;
 use traits::Validate;
-use traits::{JsonSerialize, BinarySerialize, HexSerialize, Serialize};
+use traits::{BinarySerialize, HexSerialize};
 use hash::Digest;
 
 use std::fmt;
@@ -153,18 +152,6 @@ impl Validate for BalloonParams {
     }
 }
 
-impl JsonSerialize for BalloonParams {
-    fn to_json(&self) -> Result<String> {
-        json::to_string(self)
-            .map_err(|_| ErrorKind::SerializationFailure.into())
-    }
-    
-    fn from_json(s: &str) -> Result<BalloonParams> {
-        json::from_str(s)
-            .map_err(|_| ErrorKind::DeserializationFailure.into())
-    }
-}
-
 impl BinarySerialize for BalloonParams {
     fn to_bytes(&self) -> Result<Vec<u8>> {
         encode_msgpk::to_vec(self)
@@ -192,11 +179,9 @@ impl HexSerialize for BalloonParams {
     }
 }
 
-impl Serialize for BalloonParams {}
-
 impl fmt::Display for BalloonParams {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{:?}", self.to_json().unwrap())
+        write!(f, "{:?}", self.to_hex().unwrap())
     }
 }
 

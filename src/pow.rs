@@ -14,7 +14,7 @@ use num::bigint::BigUint;
 use error::ErrorKind;
 use result::Result;
 use traits::Validate;
-use traits::{JsonSerialize, BinarySerialize, HexSerialize, Serialize};
+use traits::{BinarySerialize, HexSerialize};
 use hash::Digest;
 use balloon::{BalloonParams, BalloonHasher};
 
@@ -92,18 +92,6 @@ impl HexSerialize for PoWTarget {
         Self::from_bytes(&hex::decode(s)?)
     }
 }
-
-impl JsonSerialize for PoWTarget {
-    fn to_json(&self) -> Result<String> {
-        self.to_hex()
-    }
-
-    fn from_json(s: &str) -> Result<PoWTarget> {
-        Self::from_hex(s)
-    }
-}
-
-impl Serialize for PoWTarget {}
 
 impl fmt::Display for PoWTarget {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

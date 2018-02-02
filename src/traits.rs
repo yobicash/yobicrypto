@@ -35,15 +35,6 @@ pub trait Identify {
     fn id_to_bytes(id: Self::ID) -> Result<Vec<u8>>;
 }
 
-/// Trait for object that can be serialized from and to JSON.
-pub trait JsonSerialize: Sized {
-    /// Serialize to a json string.
-    fn to_json(&self) -> Result<String>;
-
-    /// Deserialize from a json string.
-    fn from_json(s: &str) -> Result<Self>;
-}
-
 /// Trait for object that can be serialized from and to binary.
 pub trait BinarySerialize: Sized {
     /// Serialize to a binary.
@@ -61,6 +52,3 @@ pub trait HexSerialize: Sized {
     /// Deserialize from a hex string.
     fn from_hex(s: &str) -> Result<Self>;
 }
-
-/// Trait for object that can be serialized from and to JSON, binary and HEX.
-pub trait Serialize: Sized + JsonSerialize + BinarySerialize + HexSerialize {}

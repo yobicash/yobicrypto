@@ -1,3 +1,16 @@
+// Copyright 2018 Yobicash Ltd. See the COPYRIGHT file at the top-level directory
+// of this distribution.
+//
+// Licensed under the MIT license <LICENSE or http://opensource.org/licenses/MIT>.
+// This file may not be copied, modified, or distributed except according to those
+// terms.
+
+//! Yobicrypto is the cryptographic toolkit used by the `Yobicash` cryptocurrency.
+//! It implements the symmetric and assymmetric encryption, zero-knowledge proofs using the
+//! Schnorr Protocol made non-interactive with the Fiat-Shamir Transform, and proof-of-work
+//! through Balloon Hashing ("so alpha, so CPU").
+
+
 extern crate failure;
 #[macro_use]
 extern crate failure_derive;

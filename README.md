@@ -1,6 +1,6 @@
-# Yobicrypto
-
 ![banner](assets/banner.png)
+
+# Yobicrypto
 
 Cryptographyc toolkit used in [Yobicash](https://yobicash.org).
 

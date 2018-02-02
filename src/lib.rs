@@ -8,7 +8,7 @@
 //! Yobicrypto is the cryptographic toolkit used by the `Yobicash` cryptocurrency.
 //! It implements the symmetric and assymmetric encryption, zero-knowledge proofs using the
 //! Schnorr Protocol made non-interactive with the Fiat-Shamir Transform, and proof-of-work
-//! through Balloon Hashing ("so alpha, so CPU").
+//! through Balloon Hashing ("such alpha, such CPU").
 
 
 extern crate failure;

@@ -1,0 +1,23 @@
+[package]
+name = "ctaes-sys"
+version = "0.1.0"
+authors = ["Christian Nyumbayire <christian@yobicash.org>"]
+links = "ctaes"
+build = "build.rs"
+repository = "https://github.com/yobicash/yobicash"
+description = "Native bindings to the ctaes library"
+categories = ["cryptography", "external-ffi-bindings"]
+
+[lib]
+name = "ctaes_sys"
+path = "lib.rs"
+
+[build-dependencies]
+cc = "^1.0"
+
+[dependencies]
+failure = "^0.1"
+typenum = "^1.9"
+generic-array = { version = "^0.9", features = ["serde"] }
+libc = "^0.2"
+hex = "^0.3"

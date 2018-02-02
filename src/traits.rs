@@ -16,26 +16,6 @@ pub trait Validate {
     fn validate(&self) -> Result<()>;
 }
 
-/// Trait for types that can be identified.
-pub trait Identify {
-    /// Type of the identifier.
-    type ID;
-
-    /// Return the `ID` of the implementor.
-    fn id(&self) -> Result<Self::ID>;
-    
-    /// Return the binary representation of the `ID` of the object.
-    fn binary_id(&self) -> Result<Vec<u8>> {
-        Self::id_to_bytes(self.id()?)
-    }
-
-    /// Convert a byte array to an `ID`.
-    fn id_from_bytes(b: &[u8]) -> Result<Self::ID>;
-    
-    /// Convert an `ID` to bytes.
-    fn id_to_bytes(id: Self::ID) -> Result<Vec<u8>>;
-}
-
 /// Trait for object that can be serialized from and to binary.
 pub trait BinarySerialize: Sized {
     /// Serialize to a binary.

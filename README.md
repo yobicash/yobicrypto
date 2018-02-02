@@ -14,7 +14,6 @@ Cryptographyc toolkit used in [Yobicash](https://yobicash.org).
 
 ## Install
 
-Yobicrypto depends on unstable features, so use is only on nightly projects.
 To install it add in your Cargo.toml:
 
 ```toml

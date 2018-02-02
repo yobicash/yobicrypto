@@ -64,10 +64,10 @@ matrix:
 
     # Testing other channels
     - env: TARGET=x86_64-unknown-linux-gnu
-      rust: nightly
+      rust: stable
     - env: TARGET=x86_64-apple-darwin
       os: osx
-      rust: nightly
+      rust: stable
 
 before_install:
   - set -e
@@ -82,16 +82,13 @@ script:
 
 after_script: set +e
 
-before_deploy:
-  - sh ci/before_deploy.sh
-
 deploy:
   api_key:
     secure: f4B4ev/Yig9cKDsEewTRM3xUfStdWxFIfnAnR++1weN/jxMGw2uiUE86/Wce2LJ9aYb89Uz1T7aqrdcuSwVWJApEavPwL4N6KOF8+fjaqiCHFQ01eFcmpSa5pGsduWUsocnqX5Cqz2T7TQA27mfa+fn7/G5WWyFNFo7kBvj3qZ4DmSFvh7dUHOowVESxaYONqm94D/hEEdWjmlYzEaorBoBYuJCUGJKMjDnGSUAz9azb5pgyVDXMxpHhXXC6S4urTvwseYNgr/k8hjr0NtYTRkmYOX8kWe7dEgMuKFEkM7BhMONiUBleF+40ZH6OVl7cICDAN0DkmpHvvXOT6XYEK/zaOr2cFvuOwnuJf0eSrWB27rlNuaGFxt1MF0H3Al67LPLpUKWO5Kxc8lurrTyP3ooSdj9sO3SBA/GaJUDVaUolsfMsZM5Sn0rB2AbS285VldPIBu7bJR3cwFr6EduWwGONOGeG7UhgW6gB0F6s0vRcbH8hC3e2lxuEA78yeqvnFzd3EHSjEGx95WsiWdfzYOkb0sCbJNqFXaDOrld25L5v3Zo16rOwzadvS/EKoNr1j1CG0i2aIfWrDUwliRTXHMjKh82tA4hj5FdGGaL/N0UTv/nnUP1IfnXDsFmsY+mExmzDBQDkE+oL+eso2aaJyrCEZpI/pm7rxLa/JJfkLC0=
   file_glob: true
   file: $CRATE_NAME-$TRAVIS_TAG-$TARGET.*
   on:
-    condition: $TRAVIS_RUST_VERSION = nightly
+    condition: $TRAVIS_RUST_VERSION = stable
     tags: true
   provider: releases
   skip_cleanup: true

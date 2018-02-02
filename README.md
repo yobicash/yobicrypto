@@ -34,7 +34,7 @@ extern crate yobicrypto;
 
 ## Usage
 
-Look at the documentation or at the tests for guidance.
+Look at the [documentation](https://docs.rs/yobicrypto) or at the tests for guidance.
 
 ```rust
 // main.rs

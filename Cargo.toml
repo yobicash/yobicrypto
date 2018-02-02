@@ -1,6 +1,6 @@
 [package]
 name = "yobicrypto"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Christian Nyumbayire <christian@yobicash.org>"]
 license = "MIT/Apache-2.0"
 repository = "https://github.com/yobicash/libyobicash"

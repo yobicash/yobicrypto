@@ -21,7 +21,7 @@ To install it add in your Cargo.toml:
 # Cargo.toml
 
 [dependencies]
-yobicrypto = { git = "https://github.com/yobicash/yobicrypto", version = "^0.1" }
+yobicrypto = "^0.1"
 ```
 
 and in the root of your crate:

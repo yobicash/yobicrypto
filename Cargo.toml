@@ -27,5 +27,5 @@ subtle = "^0.3"
 curve25519-dalek = { version = "^0.14", features = ["serde"] }
 ctaes-sys = { path = "ctaes-sys", version = "^0.1" }
 rand = "^0.4"
-num = { version = "^0.1", features = ["serde"] }
+rug = { version = "^0.9", features = ["serde"] }
 byteorder = "^1.2"

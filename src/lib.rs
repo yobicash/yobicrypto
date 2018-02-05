@@ -30,7 +30,7 @@ extern crate subtle;
 extern crate curve25519_dalek as curve25519;
 extern crate ctaes_sys;
 extern crate rand;
-extern crate num;
+extern crate rug;
 extern crate byteorder;
 
 pub mod error;

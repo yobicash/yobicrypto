@@ -10,7 +10,7 @@
 
 use byteorder::{BigEndian, ByteOrder, WriteBytesExt};
 use hex;
-use num::bigint::BigUint;
+use rug::Integer;
 
 use error::ErrorKind;
 use result::Result;
@@ -149,7 +149,7 @@ impl PoW {
     }
 
     /// Returns the memory used per iteration by the `PoW`.
-    pub fn memory(&self) -> Result<BigUint> {
+    pub fn memory(&self) -> Result<Integer> {
         let hasher = self.hasher()?;
 
         hasher.memory()

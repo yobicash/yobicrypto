@@ -7,11 +7,9 @@
 // terms.
 
 extern crate yobicrypto;
-extern crate num;
+extern crate rug;
 
-use num::bigint::BigUint;
-use num::traits::One;
-use num::ToPrimitive;
+use rug::Integer;
 
 use yobicrypto::{Random, Digest, BalloonParams, PoWTarget, PoW};
 use yobicrypto::{Validate, BinarySerialize};
@@ -66,8 +64,8 @@ fn pow_memory_succ() {
     let difficulty = 10;
     let pow_a = PoW::new(salt, params, difficulty).unwrap();
     let memory_a = pow_a.memory().unwrap();
-    let one: BigUint = One::one();
-    let memory_b = (&memory_a + &one).to_u32().unwrap();
+    let one = Integer::from(1);
+    let memory_b = (memory_a.clone() + &one).to_u32().unwrap();
     let pow_b = PoW::from_memory(salt, memory_b, difficulty).unwrap();
     let memory_c = pow_b.memory().unwrap();
     assert!(memory_c > memory_a)
@@ -79,7 +77,7 @@ fn pow_memory_fail() {
     let salt = Digest::from_bytes(salt_buf.as_slice()).unwrap(); 
     let params = BalloonParams::default();
     let default_memory = params.memory().unwrap();
-    let one: BigUint = One::one();
+    let one = Integer::from(1);
     let faulty_memory = (default_memory - one).to_u32().unwrap();
     let difficulty = 10;
     let res = PoW::from_memory(salt, faulty_memory, difficulty);

@@ -12,14 +12,12 @@ use result::Result;
 
 /// Trait for types that can be validated.
 pub trait Validate {
-
     /// Validate the object.
     fn validate(&self) -> Result<()>;
 }
 
 /// Trait for object that can be serialized from and to binary.
 pub trait BinarySerialize: Sized {
-
     /// Serialize to a binary.
     fn to_bytes(&self) -> Result<Vec<u8>>;
 
@@ -29,7 +27,6 @@ pub trait BinarySerialize: Sized {
 
 /// Trait for object that can be serialized from and to HEX.
 pub trait HexSerialize: Sized {
-
     /// Serialize to a hex string.
     fn to_hex(&self) -> Result<String>;
 

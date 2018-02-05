@@ -12,8 +12,7 @@ use byteorder::{BigEndian, WriteBytesExt};
 use rmp_serde::encode as encode_msgpk;
 use rmp_serde::decode as decode_msgpk;
 use hex;
-use num::bigint::BigUint;
-use num::traits::One;
+use rug::Integer;
 
 use error::ErrorKind;
 use result::Result;
@@ -61,7 +60,7 @@ impl BalloonParams {
         let mut params = BalloonParams::default();
         let default_memory = params.memory()?;
 
-        let target_memory: BigUint = BigUint::from(memory);
+        let target_memory = Integer::from(memory);
         
         if target_memory < default_memory {
             return Err(ErrorKind::InvalidArgument.into());
@@ -108,18 +107,18 @@ impl BalloonParams {
     }
 
     /// Returns the memory that would be spent in the hashing operation.
-    pub fn memory(&self) -> Result<BigUint> {
+    pub fn memory(&self) -> Result<Integer> {
         self.validate()?;
 
-        let a = BigUint::from(self.s_cost);
-        let b = BigUint::from(self.t_cost);
-        let c = BigUint::from(self.delta);
+        let a = Integer::from(self.s_cost);
+        let b = Integer::from(self.t_cost);
+        let c = Integer::from(self.delta);
 
-        let digest_size = BigUint::from(64u32);
-        let two = BigUint::from(2u32);
-        let one: BigUint = One::one();
+        let digest_size = Integer::from(64);
+        let two = Integer::from(2);
+        let one = Integer::from(1);
 
-        let memory = &digest_size * (&a + (&b - &one)*(&one + &two*(&c-&one)));
+        let memory = digest_size * (a + (b - &one) * &(one.clone() + &(two * (c - &one))));
 
         Ok(memory)
     }
@@ -213,7 +212,7 @@ impl BalloonHasher {
     }
 
     /// Returns the memory that would be spent in the hashing operation.
-    pub fn memory(&self) -> Result<BigUint> {
+    pub fn memory(&self) -> Result<Integer> {
         self.validate()?;
 
         self.params.memory()

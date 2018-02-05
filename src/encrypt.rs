@@ -20,6 +20,7 @@ use error::ErrorKind;
 use result::Result;
 use traits::Validate;
 use traits::{BinarySerialize, HexSerialize};
+use random::Random;
 use scalar::Scalar;
 use point::Point;
 
@@ -43,6 +44,12 @@ impl SecretKey {
     /// Converts the `SecretKey` to a `PublicKey`.
     pub fn to_public(&self) -> PublicKey {
         PublicKey::new(*self)
+    }
+}
+
+impl Validate for SecretKey {
+    fn validate(&self) -> Result<()> {
+        self.0.validate()
     }
 }
 
@@ -119,11 +126,17 @@ impl fmt::Display for PublicKey {
 
 /// An encryption key is a 32 bytes byte array used for encryption.
 #[derive(Copy, Clone, Eq, PartialEq, Default, Debug, Serialize, Deserialize)]
-pub struct SharedKey(GenericArray<u8, U32>);
+pub struct Key(GenericArray<u8, U32>);
 
-impl SharedKey {
-    /// Creates a new `SharedKey` with x25519 Diffie-Hellman.
-    pub fn new(sk: SecretKey, pk: PublicKey) -> Result<SharedKey> {
+impl Key {
+    /// Creates a new `Key`.
+    pub fn new() -> Key {
+        Self::from_bytes(&Random::bytes(32)).unwrap()
+    }
+
+    /// Creates a new shared `Key` with x25519 Diffie-Hellman.
+    pub fn shared(sk: SecretKey, pk: PublicKey) -> Result<Key> {
+        sk.validate()?;
         pk.validate()?;
 
         if sk.to_public() == pk {
@@ -141,7 +154,7 @@ impl SharedKey {
         hasher.input(&(&_point * &s).compress().to_bytes()[..]);
         let _key = hasher.result();
 
-        Ok(SharedKey(_key))
+        Ok(Key(_key))
     }
 
     /// Converts to AES256GCMKey
@@ -150,32 +163,32 @@ impl SharedKey {
     }
 }
 
-impl BinarySerialize for SharedKey {
+impl BinarySerialize for Key {
     fn to_bytes(&self) -> Result<Vec<u8>> {
         Ok(self.0.as_slice().to_owned())
     }
 
-    fn from_bytes(b: &[u8]) -> Result<SharedKey> {
+    fn from_bytes(b: &[u8]) -> Result<Key> {
         let len = b.len();
         if len != 32 {
             return Err(ErrorKind::InvalidLength.into())
         }
 
-        Ok(SharedKey(*GenericArray::from_slice(b)))
+        Ok(Key(*GenericArray::from_slice(b)))
     }
 }
 
-impl HexSerialize for SharedKey {
+impl HexSerialize for Key {
     fn to_hex(&self) -> Result<String> {
         Ok(hex::encode(&self.to_bytes()?))
     }
 
-    fn from_hex(s: &str) -> Result<SharedKey> {
+    fn from_hex(s: &str) -> Result<Key> {
         Self::from_bytes(&hex::decode(s)?)
     }
 }
 
-impl fmt::Display for SharedKey {
+impl fmt::Display for Key {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{:?}", self.to_hex().unwrap())
     }
@@ -183,7 +196,7 @@ impl fmt::Display for SharedKey {
 
 
 /// Decrypts a plaintext with AESGMC256.
-pub fn sym_encrypt(key: SharedKey, plaintext: &[u8]) -> Result<Vec<u8>> {
+pub fn sym_encrypt(key: Key, plaintext: &[u8]) -> Result<Vec<u8>> {
     let mut plain = Vec::new();
     plain.extend_from_slice(plaintext);
 
@@ -220,13 +233,13 @@ pub fn sym_encrypt(key: SharedKey, plaintext: &[u8]) -> Result<Vec<u8>> {
 /// Encrypts a plaintext with [STREAM](https://eprint.iacr.org/2015/189.pdf)
 /// but generates the key with x25519.
 pub fn assym_encrypt(sk: SecretKey, pk: PublicKey, plain: &[u8]) -> Result<Vec<u8>> {
-    let key = SharedKey::new(sk, pk)?;
+    let key = Key::shared(sk, pk)?;
 
     sym_encrypt(key, plain)
 }
 
 /// Decrypts a cyphertext encrypted with AESGMC256.
-pub fn sym_decrypt(key: SharedKey, cyph: &[u8], size: u32) -> Result<Vec<u8>> {
+pub fn sym_decrypt(key: Key, cyph: &[u8], size: u32) -> Result<Vec<u8>> {
     if size > cyph.len() as u32 {
         return Err(ErrorKind::InvalidLength.into());
     }
@@ -253,7 +266,7 @@ pub fn sym_decrypt(key: SharedKey, cyph: &[u8], size: u32) -> Result<Vec<u8>> {
 /// Decrypts a cyphertext encrypted with AESGMC256 and generates
 /// the key with x25519.
 pub fn assym_decrypt(sk: SecretKey, pk: PublicKey, cyph: &[u8], size: u32) -> Result<Vec<u8>> {
-    let key = SharedKey::new(sk, pk)?;
+    let key = Key::shared(sk, pk)?;
 
     sym_decrypt(key, cyph, size)
 }

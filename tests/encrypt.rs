@@ -10,7 +10,7 @@ extern crate yobicrypto;
 extern crate hex;
 
 use yobicrypto::Random;
-use yobicrypto::{SecretKey, PublicKey, SharedKey};
+use yobicrypto::{SecretKey, PublicKey, Key};
 use yobicrypto::{sym_encrypt, sym_decrypt};
 use yobicrypto::{assym_encrypt, assym_decrypt};
 use yobicrypto::HexSerialize;
@@ -48,7 +48,7 @@ fn test_vectors() -> Vec<(String, String, String)> {
 #[test]
 fn sym_encrypt_test_vectors() {
     for v in test_vectors() {
-        let key = SharedKey::from_hex(&v.0).unwrap();
+        let key = Key::from_hex(&v.0).unwrap();
         let plain = hex::decode(v.1).unwrap();
         let res = sym_encrypt(key, &plain).unwrap();
         let cyph = hex::decode(v.2).unwrap();
@@ -59,7 +59,7 @@ fn sym_encrypt_test_vectors() {
 #[test]
 fn sym_decrypt_test_vectors() {
     for v in test_vectors() {
-        let key = SharedKey::from_hex(&v.0).unwrap();
+        let key = Key::from_hex(&v.0).unwrap();
         let cyph = hex::decode(v.2).unwrap();
         let plain = hex::decode(v.1).unwrap();
         let size = plain.len() as u32;
@@ -74,8 +74,8 @@ fn shared_key_succ() {
     let sk_b = SecretKey::random();
     let pk_a = sk_a.to_public();
     let pk_b = sk_b.to_public();
-    let key_a = SharedKey::new(sk_a, pk_b).unwrap();
-    let key_b = SharedKey::new(sk_b, pk_a).unwrap();
+    let key_a = Key::shared(sk_a, pk_b).unwrap();
+    let key_b = Key::shared(sk_b, pk_a).unwrap();
     assert_eq!(key_a, key_b)
 }
 
@@ -86,8 +86,8 @@ fn shared_key_fail() {
     let sk_b = SecretKey::random();
     let pk_other_a = PublicKey::new(sk_other_a);
     let pk_b = sk_b.to_public();
-    let key_a = SharedKey::new(sk_a, pk_b).unwrap();
-    let wrong_key_b = SharedKey::new(sk_b, pk_other_a).unwrap();
+    let key_a = Key::shared(sk_a, pk_b).unwrap();
+    let wrong_key_b = Key::shared(sk_b, pk_other_a).unwrap();
     assert_ne!(key_a, wrong_key_b)
 }
 

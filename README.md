@@ -41,7 +41,7 @@ Look at the [documentation](https://docs.rs/yobicrypto) or at the tests for guid
 use yobicrypto::{Random, Scalar, ZKPWitness, ZKPProof}; 
 
 let instance = Scalar::random();
-let witness = ZKPWitness::new(instance);
+let witness = ZKPWitness::new(instance)?;
 let message = Random::bytes(64);
 let proof = ZKPProof::new(instance, &message)?;
 let verified = proof.verify(witness)?;

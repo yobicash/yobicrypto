@@ -32,8 +32,10 @@ pub struct ZKPWitness(pub Point);
 
 impl ZKPWitness {
     /// Creates a new `ZKPWitness` from a secret instance.
-    pub fn new(instance: Scalar) -> ZKPWitness {
-        ZKPWitness(&Point::default() * &instance)
+    pub fn new(instance: Scalar) -> Result<ZKPWitness> {
+        instance.validate()?;
+
+        Ok(ZKPWitness(&Point::default() * &instance))
     }
 
     /// Creates a  new `ZKPWitness` from a `Point`.

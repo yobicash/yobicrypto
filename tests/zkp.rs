@@ -13,7 +13,7 @@ use yobicrypto::{Random, Scalar, ZKPWitness, ZKPProof};
 #[test]
 fn schnorr_protocol_verify_succ() {
     let instance = Scalar::random();
-    let witness = ZKPWitness::new(instance);
+    let witness = ZKPWitness::new(instance).unwrap();
     let message = Random::bytes(64);
     let proof = ZKPProof::new(instance, &message).unwrap();
     let verified = proof.verify(witness).unwrap();
@@ -26,8 +26,7 @@ fn schnorr_protocol_verify_fail() {
     let message = Random::bytes(64);
     let proof = ZKPProof::new(instance, &message).unwrap();
     let faulty_instance = Scalar::random();
-    let faulty_witness = ZKPWitness::new(faulty_instance);
+    let faulty_witness = ZKPWitness::new(faulty_instance).unwrap();
     let verified = proof.verify(faulty_witness).unwrap();
     assert!(!verified)
 }
-

@@ -1,6 +1,11 @@
 ![banner](assets/banner.png)
 
 # Yobicrypto
+[![Travis branch](https://img.shields.io/travis/yobicash/yobicrypto/master.svg)](https://travis-ci.org/yobicash/yobicrypto)
+[![Coveralls github branch](https://img.shields.io/coveralls/github/yobicash/yobicrypto/master.svg)](https://coveralls.io/github/yobicash/yobicrypto?branch=master)
+[![Crates.io](https://img.shields.io/crates/v/yobicrypto.svg)](https://crates.io/crates/yobicrypto)
+[![Crates.io](https://img.shields.io/crates/l/yobicrypto.svg)]()
+[![Docs.rs](https://docs.rs/yobicrypto/badge.svg)](https://docs.rs/yobicrypto)
 
 Cryptographyc toolkit used in [Yobicash](https://yobicash.org).
 

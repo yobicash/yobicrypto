@@ -66,4 +66,4 @@ at your option.
 
 ## Contributing
 
-Pull requests are well accepted. By askying to contribute you implicitly accept the above [licenses](#license).
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in yobicrypto by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.

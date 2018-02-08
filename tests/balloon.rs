@@ -6,6 +6,8 @@
 // This file may not be copied, modified, or distributed except according to those
 // terms.
 
+//! Yobicrypto `balloon` module tests.
+
 extern crate yobicrypto;
 extern crate rug;
 

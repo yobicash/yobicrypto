@@ -6,6 +6,8 @@
 // This file may not be copied, modified, or distributed except according to those
 // terms.
 
+//! Yobicrypto `point` module tests.
+
 extern crate yobicrypto;
 
 use yobicrypto::{Random, Point};

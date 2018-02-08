@@ -20,7 +20,7 @@ To install it add in your Cargo.toml:
 # Cargo.toml
 
 [dependencies]
-yobicrypto = "^0.1"
+yobicrypto = "^0.2"
 ```
 
 and in the root of your crate:

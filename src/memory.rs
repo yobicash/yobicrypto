@@ -7,7 +7,8 @@
 
 //! The `memory` module provides the memory type and methods.
 
-use rug::{Integer, ops::Pow};
+use rug::Integer;
+use rug::ops::Pow;
 
 use result::Result;
 

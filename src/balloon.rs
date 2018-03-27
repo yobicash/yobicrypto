@@ -11,13 +11,13 @@ use byteorder::{BigEndian, WriteBytesExt};
 use rmp_serde::encode as encode_msgpk;
 use rmp_serde::decode as decode_msgpk;
 use hex;
-use rug::Integer;
 
 use error::ErrorKind;
 use result::Result;
 use traits::Validate;
 use traits::{BinarySerialize, HexSerialize};
 use hash::Digest;
+use memory::Memory;
 
 use std::fmt;
 
@@ -55,17 +55,15 @@ impl BalloonParams {
     }
 
     /// Creates a new `BalloonParams` given a target memory.
-    pub fn from_memory(memory: u32) -> Result<BalloonParams> {
+    pub fn from_memory(target_memory: &Memory) -> Result<BalloonParams> {
         let mut params = BalloonParams::default();
         let default_memory = params.memory()?;
-
-        let target_memory = Integer::from(memory);
         
-        if target_memory < default_memory {
+        if target_memory.clone() < default_memory {
             return Err(ErrorKind::InvalidArgument.into());
         }
 
-        if target_memory == default_memory {
+        if target_memory.clone() == default_memory {
             return Ok(params);
         }
 
@@ -74,7 +72,7 @@ impl BalloonParams {
             
             let test_memory = params.memory()?;
 
-            if test_memory >= target_memory {
+            if test_memory >= target_memory.clone() {
                 return Ok(params);
             }
             
@@ -82,7 +80,7 @@ impl BalloonParams {
             
             let test_memory = params.memory()?;
 
-            if test_memory >= target_memory {
+            if test_memory >= target_memory.clone() {
                 return Ok(params);
             }
             
@@ -90,7 +88,7 @@ impl BalloonParams {
             
             let test_memory = params.memory()?;
 
-            if test_memory >= target_memory {
+            if test_memory >= target_memory.clone() {
                 return Ok(params);
             }
 
@@ -106,16 +104,16 @@ impl BalloonParams {
     }
 
     /// Returns the memory that would be spent in the hashing operation.
-    pub fn memory(&self) -> Result<Integer> {
+    pub fn memory(&self) -> Result<Memory> {
         self.validate()?;
 
-        let a = Integer::from(self.s_cost);
-        let b = Integer::from(self.t_cost);
-        let c = Integer::from(self.delta);
+        let a = Memory::from(self.s_cost);
+        let b = Memory::from(self.t_cost);
+        let c = Memory::from(self.delta);
 
-        let digest_size = Integer::from(64);
-        let two = Integer::from(2);
-        let one = Integer::from(1);
+        let digest_size = Memory::from(64);
+        let two = Memory::from(2);
+        let one = Memory::from(1);
 
         let memory = digest_size * (a + (b - &one) * &(one.clone() + &(two * (c - &one))));
 
@@ -204,14 +202,14 @@ impl BalloonHasher {
     }
 
     /// Creates a new `BalloonHasher` given a target memory.
-    pub fn from_memory(salt: Digest, memory: u32) -> Result<BalloonHasher> {
+    pub fn from_memory(salt: Digest, memory: &Memory) -> Result<BalloonHasher> {
         let params = BalloonParams::from_memory(memory)?;
 
         BalloonHasher::new(salt, params)
     }
 
     /// Returns the memory that would be spent in the hashing operation.
-    pub fn memory(&self) -> Result<Integer> {
+    pub fn memory(&self) -> Result<Memory> {
         self.validate()?;
 
         self.params.memory()

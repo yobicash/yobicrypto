@@ -11,9 +11,7 @@
 extern crate yobicrypto;
 extern crate rug;
 
-use rug::Integer;
-
-use yobicrypto::{Random, Digest, BalloonParams, BalloonHasher};
+use yobicrypto::{Memory, Random, Digest, BalloonParams, BalloonHasher};
 use yobicrypto::{Validate, BinarySerialize};
 
 #[test]
@@ -37,18 +35,18 @@ fn balloon_params_new_fail() {
 #[test]
 fn balloon_params_from_memory_succ() {
     let lower_memory = BalloonParams::default().memory().unwrap();
-    let addendum = Integer::from(1u32<<30);
-    let memory = (lower_memory + addendum).to_u32().unwrap();
-    let res = BalloonParams::from_memory(memory);
+    let addendum = Memory::from(1u32<<30);
+    let memory = lower_memory + addendum;
+    let res = BalloonParams::from_memory(&memory);
     assert!(res.is_ok())
 }
 
 #[test]
 fn balloon_params_from_memory_fail() {
     let lower_memory = BalloonParams::default().memory().unwrap();
-    let one = Integer::from(1);
-    let memory = (lower_memory - one).to_u32().unwrap();
-    let res = BalloonParams::from_memory(memory);
+    let one = Memory::from(1);
+    let memory = lower_memory - one;
+    let res = BalloonParams::from_memory(&memory);
     assert!(res.is_err())
 }
 
@@ -114,9 +112,9 @@ fn balloon_hasher_from_memory_succ() {
     let salt_buf = Random::bytes(64);
     let salt = Digest::from_bytes(salt_buf.as_slice()).unwrap();
     let lower_memory = BalloonParams::default().memory().unwrap();
-    let addendum = Integer::from(1u32<<30);
-    let memory = (lower_memory + addendum).to_u32().unwrap();
-    let res = BalloonHasher::from_memory(salt, memory);
+    let addendum = Memory::from(1u32<<30);
+    let memory = lower_memory + addendum;
+    let res = BalloonHasher::from_memory(salt, &memory);
     assert!(res.is_ok())
 }
 
@@ -125,9 +123,9 @@ fn balloon_hasher_from_memory_fail() {
     let salt_buf = Random::bytes(64);
     let salt = Digest::from_bytes(salt_buf.as_slice()).unwrap();
     let lower_memory = BalloonParams::default().memory().unwrap();
-    let one = Integer::from(1);
-    let memory = (lower_memory - one).to_u32().unwrap();
-    let res = BalloonHasher::from_memory(salt, memory);
+    let one = Memory::from(1);
+    let memory = lower_memory - one;
+    let res = BalloonHasher::from_memory(salt, &memory);
     assert!(res.is_err())
 }
 

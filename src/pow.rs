@@ -9,13 +9,13 @@
 
 use byteorder::{BigEndian, ByteOrder, WriteBytesExt};
 use hex;
-use rug::Integer;
 
 use error::ErrorKind;
 use result::Result;
 use traits::Validate;
 use traits::{BinarySerialize, HexSerialize};
 use hash::Digest;
+use memory::Memory;
 use balloon::{BalloonParams, BalloonHasher};
 
 use std::fmt;
@@ -136,7 +136,7 @@ impl PoW {
     }
 
     /// Creates a new `PoW` deriving the parameters from a memory target.
-    pub fn from_memory(salt: Digest, memory: u32, difficulty: u32) -> Result<PoW> {
+    pub fn from_memory(salt: Digest, memory: &Memory, difficulty: u32) -> Result<PoW> {
         let params = BalloonParams::from_memory(memory)?;
 
         PoW::new(salt, params, difficulty)
@@ -148,7 +148,7 @@ impl PoW {
     }
 
     /// Returns the memory used per iteration by the `PoW`.
-    pub fn memory(&self) -> Result<Integer> {
+    pub fn memory(&self) -> Result<Memory> {
         let hasher = self.hasher()?;
 
         hasher.memory()

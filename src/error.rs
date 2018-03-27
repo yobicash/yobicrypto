@@ -9,6 +9,7 @@
 
 use failure::{Fail, Context, Backtrace};
 use failure::Error as FailureError;
+use rug::integer::ParseIntegerError;
 
 use std::fmt::{self, Display};
 use std::io::Error as IOError;
@@ -98,6 +99,12 @@ impl From<IOError> for Error {
 
 impl From<FromHexError> for Error {
     fn from(_: FromHexError) -> Error {
+        Error { inner: Context::new(ErrorKind::DeserializationFailure) }
+    }
+}
+
+impl From<ParseIntegerError> for Error {
+    fn from(_: ParseIntegerError) -> Error {
         Error { inner: Context::new(ErrorKind::DeserializationFailure) }
     }
 }
